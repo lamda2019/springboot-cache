@@ -1,8 +1,9 @@
 /*
 SQLyog Ultimate v11.33 (64 bit)
-MySQL - 5.7.17 : Database - my-wsc-cache
+MySQL - 5.7.17 : Database - my_wsc_cache
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -12,9 +13,9 @@ MySQL - 5.7.17 : Database - my-wsc-cache
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`my-wsc-cache` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`my_wsc_cache` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `my-wsc-cache`;
+USE `my_wsc_cache`;
 
 /*Table structure for table `department` */
 
