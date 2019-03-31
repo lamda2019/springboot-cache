@@ -32,5 +32,14 @@ public class EmployeeController {
         return emp;
     }
 
+   /*
+   *  http://localhost:8080/delete?id=1
+   * */
+    @GetMapping("/delete")
+    public String deleteEmp(Integer id){
+        employeeService.deleteEmp(id);
+        return "success";
+    }
+
 
 }
