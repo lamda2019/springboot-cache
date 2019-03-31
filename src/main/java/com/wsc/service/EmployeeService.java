@@ -3,12 +3,11 @@ package com.wsc.service;
 import com.wsc.bean.Employee;
 import com.wsc.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames="emp") //抽取缓存的公共配置
 public class EmployeeService {
     @Autowired
     EmployeeMapper employeeMapper;
@@ -38,7 +37,7 @@ public class EmployeeService {
         *      sync：是否使用异步模式
        *
        * */
-       @Cacheable(value = {"emp"},key = "#id"/*,keyGenerator = "myKeyGenerator",condition = "#a0>1",unless = "#a0==2"*/)
+       @Cacheable(/*value = {"emp"},*/key = "#id"/*,keyGenerator = "myKeyGenerator",condition = "#a0>1",unless = "#a0==2"*/)
        public Employee getEmp(Integer id) {
         System.out.println("查询" + id + "号员工");
         Employee emp = employeeMapper.getEmpById(id);
@@ -68,7 +67,7 @@ public class EmployeeService {
      *      为什么是没更新前的？【1号员工没有在缓存中更新】
      *
      */
-    @CachePut(value = "emp",key = "#result.id")
+    @CachePut(/*value = "emp",*/key = "#result.id")
     public Employee updateEmp(Employee employee){
         System.out.println("updateEmp:"+employee);
         employeeMapper.updateEmp(employee);
@@ -86,11 +85,28 @@ public class EmployeeService {
      *
      *
      */
-    @CacheEvict(value="emp",beforeInvocation = true/*,key = "#id"*/)
+    @CacheEvict(/*value="emp",*/beforeInvocation = true/*,key = "#id"*/)
     public void deleteEmp(Integer id){
         System.out.println("deleteEmp:"+id);
         //employeeMapper.deleteEmpById(id);
         int i = 10/0;
     }
+
+
+    // @Caching 定义复杂的缓存规则
+    @Caching(
+            cacheable = {
+                    @Cacheable(/*value="emp",*/key = "#lastName")
+            },
+            put = {
+                    @CachePut(/*value="emp",*/key = "#result.id"),
+                    @CachePut(/*value="emp",*/key = "#result.email")
+            }
+    )
+    public Employee getEmpByLastName(String lastName){
+        return employeeMapper.getEmpByLastName(lastName);
+    }
+
+
 
 }

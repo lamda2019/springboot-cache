@@ -41,5 +41,14 @@ public class EmployeeController {
         return "success";
     }
 
+    /*
+    * http://localhost:8080/emp/lastname/jack111111
+    * */
+    @GetMapping("/emp/lastname/{lastName}")
+    public Employee getEmpByLastName(@PathVariable("lastName") String lastName){
+        return employeeService.getEmpByLastName(lastName);
+    }
+
+
 
 }
