@@ -3,6 +3,7 @@ package com.wsc.service;
 import com.wsc.bean.Employee;
 import com.wsc.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +37,40 @@ public class EmployeeService {
         *      sync：是否使用异步模式
        *
        * */
-       @Cacheable(value = {"emp"},keyGenerator = "myKeyGenerator"/*,condition = "#a0>1",unless = "#a0==2"*/)
+       @Cacheable(value = {"emp"}/*,keyGenerator = "myKeyGenerator",condition = "#a0>1",unless = "#a0==2"*/)
        public Employee getEmp(Integer id) {
         System.out.println("查询" + id + "号员工");
         Employee emp = employeeMapper.getEmpById(id);
         return emp;
+    }
+
+    /**
+     * @CachePut：既调用方法，又更新缓存数据；同步更新缓存
+     * 修改了数据库的某个数据，同时更新缓存；
+     * 运行时机：
+     *  1、先调用目标方法
+     *  2、将目标方法的结果缓存起来
+     *
+     * 测试步骤：
+     *  1、查询1号员工；查到的结果会放在缓存中；
+     *          key：1  value：lastName：张三
+     *  2、以后查询还是之前的结果
+     *  3、更新1号员工；【lastName:zhangsan；gender:0】
+     *          将方法的返回值也放进缓存了；
+     *          key：传入的employee对象  值：返回的employee对象；
+     *  4、查询1号员工？
+     *      应该是更新后的员工；
+     *       @CachePut(value = "emp",key = "#result.id")
+     *          key = "#employee.id":使用传入的参数的员工id；
+     *          key = "#result.id"：使用返回后的id
+     *             @Cacheable的key是不能用#result
+     *      为什么是没更新前的？【1号员工没有在缓存中更新】
+     *
+     */
+    @CachePut(value = "emp",key = "#result.id")
+    public Employee updateEmp(Employee employee){
+        System.out.println("updateEmp:"+employee);
+        employeeMapper.updateEmp(employee);
+        return employee;
     }
 }

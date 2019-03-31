@@ -21,5 +21,16 @@ public class EmployeeController {
         Employee employee = employeeService.getEmp(id);
         return employee;
     }
+    /*
+    *
+    *  http://localhost:8080/emp?id=1&lastName=jack&email=jack@qq.com&gender=1&dId=1
+    * */
+    @GetMapping("/emp")
+    public Employee update(Employee employee){
+        Employee emp = employeeService.updateEmp(employee);
+
+        return emp;
+    }
+
 
 }
